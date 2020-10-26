@@ -8,12 +8,26 @@ use Illuminate\Support\ServiceProvider;
 class TranslationServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
+     * Bootstrap the application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__ . '/../config/translations.php' => config_path('translations.php'),
+        ], 'config');
+    }
+
+    /**
      * Register the service provider.
      *
      * @return void
      */
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__ . '/../config/translations.php', 'translations');
+
         $this->registerLoader();
 
         $this->app->singleton('translator', function ($app) {
@@ -40,7 +54,9 @@ class TranslationServiceProvider extends ServiceProvider implements DeferrablePr
     protected function registerLoader()
     {
         $this->app->singleton('translation.loader', function ($app) {
-            return new FileLoader($app['files'], $app['path.lang']);
+            $config = $app->make('config')->get('translations');
+
+            return new FileLoader($app['files'], $config['translations_path']);
         });
     }
 
