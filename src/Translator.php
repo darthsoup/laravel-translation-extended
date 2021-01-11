@@ -3,7 +3,7 @@
 namespace DarthSoup\TranslationExtended;
 
 use Countable;
-use Illuminate\Contracts\Translation\Loader;
+use DarthSoup\TranslationExtended\Contracts\Loader;
 use Illuminate\Contracts\Translation\Translator as TranslatorContract;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -19,7 +19,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * The loader implementation.
      *
-     * @var \Illuminate\Contracts\Translation\Loader
+     * @var Loader
      */
     protected $loader;
 
@@ -47,14 +47,14 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * The message selector.
      *
-     * @var \Illuminate\Translation\MessageSelector
+     * @var MessageSelector
      */
     protected $selector;
 
     /**
      * Create a new translator instance.
      *
-     * @param  \Illuminate\Contracts\Translation\Loader  $loader
+     * @param  \DarthSoup\TranslationExtended\Contracts\Loader  $loader
      * @param  string  $locale
      * @return void
      */

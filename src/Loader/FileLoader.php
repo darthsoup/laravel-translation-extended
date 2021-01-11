@@ -1,8 +1,8 @@
 <?php
 
-namespace DarthSoup\TranslationExtended;
+namespace DarthSoup\TranslationExtended\Loader;
 
-use Illuminate\Contracts\Translation\Loader;
+use DarthSoup\TranslationExtended\Contracts\Loader;
 use Illuminate\Filesystem\Filesystem;
 use RuntimeException;
 
@@ -21,13 +21,6 @@ class FileLoader implements Loader
      * @var string
      */
     protected $path;
-
-    /**
-     * All of the registered paths to JSON translation files.
-     *
-     * @var array
-     */
-    protected $jsonPaths = [];
 
     /**
      * All of the namespace hints.
@@ -57,12 +50,8 @@ class FileLoader implements Loader
      * @param  string|null  $namespace
      * @return array
      */
-    public function load($locale, $group, $namespace = null)
+    public function load(string $locale, string $group, ?string $namespace = null): array
     {
-        if ($group === '*' && $namespace === '*') {
-            return $this->loadJsonPaths($locale);
-        }
-
         if (is_null($namespace) || $namespace === '*') {
             return $this->loadPath($this->path, $locale, $group);
         }
@@ -78,7 +67,7 @@ class FileLoader implements Loader
      * @param  string  $namespace
      * @return array
      */
-    protected function loadNamespaced($locale, $group, $namespace)
+    protected function loadNamespaced(string $locale, string $group, string $namespace)
     {
         if (isset($this->hints[$namespace])) {
             $lines = $this->loadPath($this->hints[$namespace], $locale, $group);
@@ -98,7 +87,7 @@ class FileLoader implements Loader
      * @param  string  $namespace
      * @return array
      */
-    protected function loadNamespaceOverrides(array $lines, $locale, $group, $namespace)
+    protected function loadNamespaceOverrides(array $lines, string $locale, string $group, string $namespace)
     {
         $file = "{$this->path}/vendor/{$namespace}/{$locale}/{$group}.php";
 
@@ -117,7 +106,7 @@ class FileLoader implements Loader
      * @param  string  $group
      * @return array
      */
-    protected function loadPath($path, $locale, $group)
+    protected function loadPath(string $path, string $locale, string $group)
     {
         if ($this->files->exists($full = "{$path}/{$locale}/{$group}.php")) {
             return $this->files->getRequire($full);
@@ -127,52 +116,15 @@ class FileLoader implements Loader
     }
 
     /**
-     * Load a locale from the given JSON file path.
-     *
-     * @param  string  $locale
-     * @return array
-     *
-     * @throws \RuntimeException
-     */
-    protected function loadJsonPaths($locale)
-    {
-        return collect(array_merge($this->jsonPaths, [$this->path]))
-            ->reduce(function ($output, $path) use ($locale) {
-                if ($this->files->exists($full = "{$path}/{$locale}.json")) {
-                    $decoded = json_decode($this->files->get($full), true);
-
-                    if (is_null($decoded) || json_last_error() !== JSON_ERROR_NONE) {
-                        throw new RuntimeException("Translation file [{$full}] contains an invalid JSON structure.");
-                    }
-
-                    $output = array_merge($output, $decoded);
-                }
-
-                return $output;
-            }, []);
-    }
-
-    /**
      * Add a new namespace to the loader.
      *
      * @param  string  $namespace
      * @param  string  $hint
      * @return void
      */
-    public function addNamespace($namespace, $hint)
+    public function addNamespace(string $namespace, string $hint): void
     {
         $this->hints[$namespace] = $hint;
-    }
-
-    /**
-     * Add a new JSON path to the loader.
-     *
-     * @param  string  $path
-     * @return void
-     */
-    public function addJsonPath($path)
-    {
-        $this->jsonPaths[] = $path;
     }
 
     /**
@@ -180,7 +132,7 @@ class FileLoader implements Loader
      *
      * @return array
      */
-    public function namespaces()
+    public function namespaces(): array
     {
         return $this->hints;
     }

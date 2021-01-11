@@ -1,8 +1,8 @@
 <?php
 
-namespace DarthSoup\TranslationExtended;
+namespace DarthSoup\TranslationExtended\Loader;
 
-use Illuminate\Contracts\Translation\Loader;
+use DarthSoup\TranslationExtended\Contracts\Loader;
 
 class ArrayLoader implements Loader
 {
@@ -21,7 +21,7 @@ class ArrayLoader implements Loader
      * @param  string|null  $namespace
      * @return array
      */
-    public function load($locale, $group, $namespace = null)
+    public function load(string $locale, string $group, ?string $namespace = null): array
     {
         $namespace = $namespace ?: '*';
 
@@ -35,18 +35,7 @@ class ArrayLoader implements Loader
      * @param  string  $hint
      * @return void
      */
-    public function addNamespace($namespace, $hint)
-    {
-        //
-    }
-
-    /**
-     * Add a new JSON path to the loader.
-     *
-     * @param  string  $path
-     * @return void
-     */
-    public function addJsonPath($path)
+    public function addNamespace(string $namespace, string $hint): void
     {
         //
     }
@@ -74,7 +63,7 @@ class ArrayLoader implements Loader
      *
      * @return array
      */
-    public function namespaces()
+    public function namespaces(): array
     {
         return [];
     }

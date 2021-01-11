@@ -2,6 +2,7 @@
 
 namespace DarthSoup\TranslationExtended;
 
+use DarthSoup\TranslationExtended\Loader\FileLoader;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,20 +31,7 @@ class TranslationServiceProvider extends ServiceProvider implements DeferrablePr
 
         $this->registerLoader();
 
-        $this->app->singleton('translator', function ($app) {
-            $loader = $app['translation.loader'];
-
-            // When registering the translator component, we'll need to set the default
-            // locale as well as the fallback locale. So, we'll grab the application
-            // configuration so we can easily get both of these values from there.
-            $locale = $app['config']['app.locale'];
-
-            $trans = new Translator($loader, $locale);
-
-            $trans->setFallback($app['config']['app.fallback_locale']);
-
-            return $trans;
-        });
+        $this->registerTranslator();
     }
 
     /**
@@ -57,6 +45,29 @@ class TranslationServiceProvider extends ServiceProvider implements DeferrablePr
             $config = $app->make('config')->get('translations');
 
             return new FileLoader($app['files'], $config['translations_path']);
+        });
+    }
+
+    /**
+     * Register the translation line loader.
+     *
+     * @return void
+     */
+    protected function registerTranslator()
+    {
+        $this->app->singleton('translator', function ($app) {
+            $loader = $app['translation.loader'];
+
+            // When registering the translator component, we'll need to set the default
+            // locale as well as the fallback locale. So, we'll grab the application
+            // configuration so we can easily get both of these values from there.
+            $locale = $app['config']['app.locale'];
+
+            $trans = new Translator($loader, $locale);
+
+            $trans->setFallback($app['config']['app.fallback_locale']);
+
+            return $trans;
         });
     }
 
