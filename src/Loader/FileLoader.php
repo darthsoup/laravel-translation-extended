@@ -36,7 +36,7 @@ class FileLoader implements Loader
      * @param  string  $path
      * @return void
      */
-    public function __construct(Filesystem $files, $path)
+    public function __construct(Filesystem $files, string $path)
     {
         $this->path = $path;
         $this->files = $files;
@@ -67,7 +67,7 @@ class FileLoader implements Loader
      * @param  string  $namespace
      * @return array
      */
-    protected function loadNamespaced(string $locale, string $group, string $namespace)
+    protected function loadNamespaced(string $locale, string $group, string $namespace): array
     {
         if (isset($this->hints[$namespace])) {
             $lines = $this->loadPath($this->hints[$namespace], $locale, $group);
@@ -87,7 +87,7 @@ class FileLoader implements Loader
      * @param  string  $namespace
      * @return array
      */
-    protected function loadNamespaceOverrides(array $lines, string $locale, string $group, string $namespace)
+    protected function loadNamespaceOverrides(array $lines, string $locale, string $group, string $namespace): array
     {
         $file = "{$this->path}/vendor/{$namespace}/{$locale}/{$group}.php";
 
@@ -106,7 +106,7 @@ class FileLoader implements Loader
      * @param  string  $group
      * @return array
      */
-    protected function loadPath(string $path, string $locale, string $group)
+    protected function loadPath(string $path, string $locale, string $group): array
     {
         if ($this->files->exists($full = "{$path}/{$locale}/{$group}.php")) {
             return $this->files->getRequire($full);
