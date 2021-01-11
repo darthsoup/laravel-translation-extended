@@ -1,13 +1,13 @@
 <?php
 
-namespace DarthSoup\Tests\TranslationExtended;
+namespace DarthSoup\Tests\TranslationExtended\Loader;
 
+use DarthSoup\TranslationExtended\Loader\FileLoader;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Translation\FileLoader;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
-class TranslationFileLoaderTest extends TestCase
+class FileLoaderTest extends TestCase
 {
     protected function tearDown(): void
     {
@@ -61,27 +61,5 @@ class TranslationFileLoaderTest extends TestCase
         $files->shouldReceive('getRequire')->never();
 
         $this->assertEquals([], $loader->load('en', 'foo', 'bar'));
-    }
-
-    public function testLoadMethodForJSONProperlyCallsLoader()
-    {
-        $loader = new FileLoader($files = m::mock(Filesystem::class), __DIR__);
-        $files->shouldReceive('exists')->once()->with(__DIR__.'/en.json')->andReturn(true);
-        $files->shouldReceive('get')->once()->with(__DIR__.'/en.json')->andReturn('{"foo":"bar"}');
-
-        $this->assertEquals(['foo' => 'bar'], $loader->load('en', '*', '*'));
-    }
-
-    public function testLoadMethodForJSONProperlyCallsLoaderForMultiplePaths()
-    {
-        $loader = new FileLoader($files = m::mock(Filesystem::class), __DIR__);
-        $loader->addJsonPath(__DIR__.'/another');
-
-        $files->shouldReceive('exists')->once()->with(__DIR__.'/en.json')->andReturn(true);
-        $files->shouldReceive('exists')->once()->with(__DIR__.'/another/en.json')->andReturn(true);
-        $files->shouldReceive('get')->once()->with(__DIR__.'/en.json')->andReturn('{"foo":"bar"}');
-        $files->shouldReceive('get')->once()->with(__DIR__.'/another/en.json')->andReturn('{"foo":"backagebar", "baz": "backagesplash"}');
-
-        $this->assertEquals(['foo' => 'bar', 'baz' => 'backagesplash'], $loader->load('en', '*', '*'));
     }
 }

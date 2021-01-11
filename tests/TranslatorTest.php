@@ -9,7 +9,7 @@ use Illuminate\Translation\Translator;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
-class TranslationTranslatorTest extends TestCase
+class TranslatorTest extends TestCase
 {
     protected function tearDown(): void
     {

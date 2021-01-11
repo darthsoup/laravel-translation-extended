@@ -5,7 +5,7 @@ namespace DarthSoup\Tests\TranslationExtended;
 use Illuminate\Translation\MessageSelector;
 use PHPUnit\Framework\TestCase;
 
-class TranslationMessageSelectorTest extends TestCase
+class MessageSelectorTest extends TestCase
 {
     /**
      * @dataProvider chooseTestData
