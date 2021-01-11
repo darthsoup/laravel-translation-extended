@@ -1,5 +1,7 @@
 {
     "name": "darthsoup/laravel-translation-extended",
+    "description": "Translation service replacement for laravel.",
+    "keywords": ["laravel", "framework", "translation"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -9,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^7.2.5|^8.0",
+        "php": "^7.3|^8.0",
         "ext-json": "*",
         "illuminate/contracts": "^7|^8",
         "illuminate/filesystem": "^7|^8",
