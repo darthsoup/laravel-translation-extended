@@ -3,10 +3,11 @@
 namespace DarthSoup\TranslationExtended;
 
 use DarthSoup\TranslationExtended\Loader\FileLoader;
-use Illuminate\Contracts\Support\DeferrableProvider;
+use DarthSoup\TranslationExtended\Loader\JsonLoader;
+use Illuminate\Translation\TranslationServiceProvider as BaseTranslationServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
-class TranslationServiceProvider extends ServiceProvider implements DeferrableProvider
+class TranslationServiceProvider extends BaseTranslationServiceProvider
 {
     /**
      * Bootstrap the application services.
